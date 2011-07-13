@@ -1,0 +1,72 @@
+<script type="text/javascript" src= "http://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+var map;
+ function setCountryOverlay(isoName, color){
+    var arr = [];
+    var points;
+    var poly;
+    $.get("new_world.kml", function(data){
+                xxx = data
+                html = "";
+
+                //loop through placemarks tags
+           $(data).find("S_country").each(function(index, value){
+           
+           alert('a');
+           if(($(this).find('ISO_2DIGIT').text() == isoName)){
+           $(this).find('coordinates').each(function(index2, value2){
+           points = ($(value2).text()).split(" ")
+                                       
+              $(points).each(function(index3, value3){
+                                          if(!(value3.length == 0)){
+                            latlng = value3.split(",");
+                            
+                            if(!(latlng[0].length < 3 )){
+                            arr.push(new google.maps.LatLng(latlng[1], latlng[0]));}}
+              })
+           // alert(arr.length)
+
+           })
+        }
+                })
+
+     poly = new google.maps.Polygon({
+          path: arr,
+          strokeColor: "#"+color,
+          strokeWeight: "#"+color,
+          strokeOpacity: "#"+color,
+          fillColor: "#"+color,
+        });
+        poly.setMap(map)
+        });}
+              
+              
+$(document).ready(function(){
+        function init(){
+            var latlng = new google.maps.LatLng(-43.552965, 172.47315);
+            var myOptions = {
+                zoom: 1,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map"), myOptions);
+        }
+        init();
+        setCountryOverlay('ID', 'aa0000');
+})
+
+
+
+    
+    </script>
+    
+    
+<html>
+    <body>
+        <div id="map" style="width:600px;height: 600px;">
+        </div>
+        <ul class="navigation">
+        </ul>
+    </body>
+</html>
